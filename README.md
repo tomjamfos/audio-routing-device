@@ -26,6 +26,8 @@ open build/AudioRoutingDevice_artefacts/Debug/Audio\ Routing\ Device.app
 
 ｉｆ　ｙｏｕ　ｆｏｒｇｏｔ　`--recurse-submodules`　ｒｕｎ　`git submodule update --init --recursive`
 
+ａｆｔｅｒ　ｒｅｂｕｉｌｄｉｎｇ，　ｒｅｌａｕｎｃｈ　ｔｈｅ　ａｐｐ　ｔｏ　ｐｉｃｋ　ｕｐ　ｃｈａｎｇｅｓ．
+
 ｍａｃＯＳ　ｗｉｌｌ　ｒｅｑｕｅｓｔ　ｍｉｃｒｏｐｈｏｎｅ　ｐｅｒｍｉｓｓｉｏｎ　ｏｎ　ｆｉｒｓｔ　ｌａｕｎｃｈ．　ｇｒａｎｔ　ｉｔ．
 
 ---
