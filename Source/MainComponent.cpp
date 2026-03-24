@@ -9,6 +9,8 @@ static juce::File getSettingsFile()
 
 MainComponent::MainComponent()
 {
+    setLookAndFeel(&nervLF);
+
     setAudioChannels(2, 2);
 
     // Restore saved settings
@@ -54,11 +56,12 @@ MainComponent::MainComponent()
 
     refreshDeviceControls();
 
-    setSize(460, 220);
+    setSize(420, 200);
 }
 
 MainComponent::~MainComponent()
 {
+    setLookAndFeel(nullptr);
     deviceManager.removeChangeListener(this);
     shutdownAudio();
 }
@@ -156,21 +159,63 @@ void MainComponent::releaseResources()
 
 void MainComponent::paint(juce::Graphics& g)
 {
-    g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
+    auto bounds = getLocalBounds();
+
+    // CRT ground
+    g.fillAll(juce::Colour(0xff0d0d0f));
+
+    // Panel border — single pixel inset
+    g.setColour(juce::Colour(0xff2a2a35));
+    g.drawRect(bounds.reduced(1), 1);
+
+    // Corner brackets — top-left and bottom-right
+    const int arm = 10;
+    const int m   = 4;
+    g.setColour(juce::Colour(0xff39ff6e));
+
+    // Top-left
+    g.fillRect(m, m, arm, 1);
+    g.fillRect(m, m, 1, arm);
+
+    // Bottom-right
+    int bx = bounds.getWidth()  - m - arm;
+    int by = bounds.getHeight() - m - 1;
+    g.fillRect(bx, by, arm, 1);
+    g.fillRect(bounds.getWidth() - m - 1, bounds.getHeight() - m - arm, 1, arm);
+
+    // Identifier — dim, top-right
+    g.setColour(juce::Colour(0xff2a2a35));
+    g.setFont(juce::Font(juce::FontOptions(9.0f)));
+    g.drawText("ARD-01", bounds.reduced(m + 2).removeFromTop(12),
+               juce::Justification::topRight);
+
+    // Row labels
+    auto area      = bounds.reduced(12);
+    auto labelArea = area.withTrimmedRight(44);  // leave meter alone
+
+    const int rowH    = 20;
+    const int gap     = 8;
+    const int totalH  = rowH * 2 + gap;
+    int       startY  = area.getY() + (area.getHeight() - totalH) / 2;
+
+    g.setColour(juce::Colour(0xff555566));
+    g.setFont(juce::Font(juce::FontOptions(9.0f)));
+    g.drawText("VOL", labelArea.getX(), startY - 11, 30, 10, juce::Justification::centredLeft);
+    g.drawText("OUT", labelArea.getX(), startY + rowH + gap - 11, 30, 10, juce::Justification::centredLeft);
 }
 
 void MainComponent::resized()
 {
-    auto area      = getLocalBounds().reduced(10);
-    auto meterArea = area.removeFromRight(50);
+    auto area      = getLocalBounds().reduced(12);
+    auto meterArea = area.removeFromRight(44);
 
-    const int rowH    = 30;
-    const int spacing = 6;
+    const int rowH   = 20;
+    const int gap    = 8;
+    const int totalH = rowH * 2 + gap;
+    int       startY = area.getY() + (area.getHeight() - totalH) / 2;
 
-    volumeSlider.setBounds(area.removeFromTop(rowH));
-    area.removeFromTop(spacing);
-
-    outputDeviceBox.setBounds(area.removeFromTop(rowH).withWidth(120));
+    volumeSlider.setBounds  (area.getX(), startY,                  area.getWidth(), rowH);
+    outputDeviceBox.setBounds(area.getX(), startY + rowH + gap,    140,             rowH);
 
     levelMeter.setBounds(meterArea);
 }

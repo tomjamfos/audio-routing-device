@@ -23,7 +23,7 @@ public:
         auto leftArea  = area.withWidth(barWidth);
         auto rightArea = area.withX(area.getX() + barWidth + kGap).withWidth(barWidth);
 
-        g.fillAll(juce::Colour(0xff1a1a1a));
+        g.fillAll(juce::Colour(0xff0d0d0f));
 
         drawBar(g, leftArea,  displayL);
         drawBar(g, rightArea, displayR);
@@ -86,29 +86,37 @@ private:
         int yOrange = thresholdY(kDbOrange);
         int yRed    = thresholdY(kDbRed);
 
-        // Unfilled (dark background)
-        g.setColour(juce::Colour(0xff2a2a2a));
+        // Unfilled (dim track)
+        g.setColour(juce::Colour(0xff1e1e28));
         g.fillRect(area.getX(), area.getY(), area.getWidth(), filledY - area.getY());
 
         // Helper: draw one colour segment of the filled region
-        auto drawSegment = [&](int segTop, int segBottom, juce::Colour colour)
+        auto drawSegment = [&](int segTop, int segBottom, juce::Colour colour, bool glow)
         {
             int top    = juce::jmax(segTop,    filledY);
             int bottom = juce::jmin(segBottom, area.getBottom());
-            if (top < bottom)
+            if (top >= bottom) return;
+
+            if (glow)
             {
-                g.setColour(colour);
-                g.fillRect(area.getX(), top, area.getWidth(), bottom - top);
+                // Glow passes — spread horizontally
+                g.setColour(colour.withAlpha(0.063f));
+                g.fillRect(area.getX() - 3, top, area.getWidth() + 6, bottom - top);
+                g.setColour(colour.withAlpha(0.157f));
+                g.fillRect(area.getX() - 1, top, area.getWidth() + 2, bottom - top);
             }
+
+            g.setColour(colour);
+            g.fillRect(area.getX(), top, area.getWidth(), bottom - top);
         };
 
-        drawSegment(area.getY(), yRed,    juce::Colour(0xffff3333)); // red
-        drawSegment(yRed,        yOrange, juce::Colour(0xffff9900)); // orange
-        drawSegment(yOrange,     area.getBottom(), juce::Colour(0xff33cc44)); // green
+        drawSegment(area.getY(), yRed,         juce::Colour(0xffff2d55), false); // clip red
+        drawSegment(yRed,        yOrange,       juce::Colour(0xffff9500), false); // warning amber
+        drawSegment(yOrange,     area.getBottom(), juce::Colour(0xff39ff6e), true); // phosphor green + glow
 
         // Tick marks at -12 dB and 0 dB
-        g.setColour(juce::Colour(0xff555555));
-        g.fillRect(area.getX(), yOrange - 1,            area.getWidth(), 1);
-        g.fillRect(area.getX(), thresholdY(0.0f) - 1,   area.getWidth(), 1);
+        g.setColour(juce::Colour(0xff2a2a35));
+        g.fillRect(area.getX(), yOrange - 1,          area.getWidth(), 1);
+        g.fillRect(area.getX(), thresholdY(0.0f) - 1, area.getWidth(), 1);
     }
 };

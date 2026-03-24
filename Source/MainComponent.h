@@ -2,6 +2,7 @@
 
 #include <juce_audio_utils/juce_audio_utils.h>
 #include "LevelMeter.h"
+#include "NervLookAndFeel.h"
 
 class MainComponent : public juce::AudioAppComponent,
                       public juce::ChangeListener
@@ -21,6 +22,8 @@ public:
 private:
     void saveSettings();
     void refreshDeviceControls();
+
+    NervLookAndFeel nervLF;
 
     std::atomic<float> gain  { 1.0f };
     std::atomic<float> peakL { 0.0f };
