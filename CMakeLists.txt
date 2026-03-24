@@ -26,6 +26,7 @@ target_compile_definitions(AudioRoutingDevice PRIVATE
 target_link_libraries(AudioRoutingDevice PRIVATE
     juce::juce_audio_devices
     juce::juce_audio_utils
+    juce::juce_dsp
     juce::juce_gui_basics
     PUBLIC
     juce::juce_recommended_config_flags

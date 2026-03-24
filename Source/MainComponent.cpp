@@ -53,10 +53,11 @@ MainComponent::MainComponent()
 
     addAndMakeVisible(volumeSlider);
     addAndMakeVisible(levelMeter);
+    addAndMakeVisible(spectrumAnalyser);
 
     refreshDeviceControls();
 
-    setSize(420, 200);
+    setSize(420, 280);
 }
 
 MainComponent::~MainComponent()
@@ -104,8 +105,9 @@ void MainComponent::changeListenerCallback(juce::ChangeBroadcaster*)
     saveSettings();
 }
 
-void MainComponent::prepareToPlay(int /*samplesPerBlockExpected*/, double /*sampleRate*/)
+void MainComponent::prepareToPlay(int /*samplesPerBlockExpected*/, double sampleRate)
 {
+    spectrumAnalyser.setSampleRate(sampleRate);
 }
 
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
@@ -151,6 +153,11 @@ void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& buffer
 
     peakL.store(maxL);
     peakR.store(maxR);
+
+    if (bufferToFill.buffer->getNumChannels() > 0)
+        spectrumAnalyser.pushSamples(
+            bufferToFill.buffer->getReadPointer(0, bufferToFill.startSample),
+            bufferToFill.numSamples);
 }
 
 void MainComponent::releaseResources()
@@ -206,16 +213,19 @@ void MainComponent::paint(juce::Graphics& g)
 
 void MainComponent::resized()
 {
-    auto area      = getLocalBounds().reduced(12);
-    auto meterArea = area.removeFromRight(44);
+    auto full    = getLocalBounds().reduced(12);
+    auto specArea = full.removeFromBottom(76);
+    spectrumAnalyser.setBounds(specArea);
+
+    auto meterArea = full.removeFromRight(44);
 
     const int rowH   = 20;
     const int gap    = 8;
     const int totalH = rowH * 2 + gap;
-    int       startY = area.getY() + (area.getHeight() - totalH) / 2;
+    int       startY = full.getY() + (full.getHeight() - totalH) / 2;
 
-    volumeSlider.setBounds  (area.getX(), startY,                  area.getWidth(), rowH);
-    outputDeviceBox.setBounds(area.getX(), startY + rowH + gap,    140,             rowH);
+    volumeSlider.setBounds  (full.getX(), startY,               full.getWidth(), rowH);
+    outputDeviceBox.setBounds(full.getX(), startY + rowH + gap, 140,             rowH);
 
     levelMeter.setBounds(meterArea);
 }

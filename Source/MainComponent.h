@@ -2,6 +2,7 @@
 
 #include <juce_audio_utils/juce_audio_utils.h>
 #include "LevelMeter.h"
+#include "SpectrumAnalyser.h"
 #include "NervLookAndFeel.h"
 
 class MainComponent : public juce::AudioAppComponent,
@@ -34,6 +35,7 @@ private:
     juce::ComboBox outputDeviceBox;
 
     LevelMeter levelMeter { peakL, peakR };
+    SpectrumAnalyser spectrumAnalyser;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };
