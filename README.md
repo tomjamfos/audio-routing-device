@@ -1,127 +1,96 @@
-```
-å̴̢͈͔̪̙̤͖͒̈́̑̂̚͠ų̷̛̩̰̰͙̌̑͒̎͘d̷̙̓͑̏̌̚i̴̢̩͔͕͆̾̅̓̚o̵̧̢̲̻͔̒̌̓̚͝ ̸̼̫͖̺͇̀̆͋̈́r̷̡̪̙͚̂̔̓̄͘o̴̡̺͓̬͊̒̿̚͝ų̷̧̜͕̀̃̅̏̕t̵̙̥͉̃̎̌͘͝i̸̘̳̫͆̒̓̚͝n̸̖̘͍͚̓̀̈́̿͘g̸̨̛͓͙̺͑̾̄ ̶̨͇̥͕̄̓̚͠d̷̡̙̺͖̓̌͑̚e̸̩̪͚̘͂̾̆̈́͘v̷̡͔͎̘̈́̏̌͑͘i̷̢̖͇̙͌̒̄̓̕c̴̙͔̺͚̈́̏̒͘͝e̷͚̙͔̒̾̄̀̈͝
-```
+# audio routing device
 
-# 💾 AUDIO ROUTING DEVICE 💾
-## `v0.1.0 // macOS // JUCE 8 // C++17`
+macOS application for routing audio. built with JUCE 8 and C++17.
 
----
-
-h̵̭͝ḛ̵͑y̶̙̑.̸̲̈́ this is a personal audio routing app for listening to music on mac. it was built entirely inside **Claude Code** — every function, every layout, every carefully tuned VU meter decay — written by **Claude Sonnet 4.6** ✨🤖✨
-
-the human (tom) had the idea. i had the keyboard. we don't talk about who did more work.
+🦷
 
 ---
 
-## 🔩 W̸̦͒H̵̙̄A̵̲̎T̸͎͑ ̴̫͝D̶̺̊O̴͚͒E̸͍͝S̵̰̈ ̸̰̕I̷̩͑T̵̖̋ ̷̫͝D̵̺͝O̷̜͌ 🔩
+## requirements
 
-routes audio. meters levels. remembers your device. doesn't crash (usually 🙂).
-
-```
-[your music app]
-      │
-      ▼
-[BlackHole 2ch]  ← virtual audio driver
-      │
-      ▼
-[this app]  ← you are here 👁️
-      │
-      ▼
-[your ears]  🎧
-```
-
-the UI looks like something from a screen you'd see in a movie about computers, if that movie had good taste 💅
+- Xcode
+- CMake ≥ 3.22
+- Git
 
 ---
 
-## 🛠️ B̷͙̓Ų̸̈́I̴̳̐L̷̰̓D̸̥̑ ̷̘̿I̴̘͑T̴̺̃ 🛠️
-
-you will need xcode, cmake ≥ 3.22, and git. that's it. here:
+## build
 
 ```bash
-# clone — don't forget the submodule or cmake will lose its mind
 git clone --recurse-submodules https://github.com/tomjamfos/audio-routing-device
 cd audio-routing-device
-
-# configure
 cmake -B build -DCMAKE_BUILD_TYPE=Debug
-
-# build
 cmake --build build
+```
 
-# launch 🚀
+if you forgot `--recurse-submodules`:
+
+```bash
+git submodule update --init --recursive
+```
+
+launch:
+
+```bash
 open build/AudioRoutingDevice_artefacts/Debug/Audio\ Routing\ Device.app
 ```
 
-> ⚠️ forgot `--recurse-submodules`? JUCE won't exist and everything will fail.
-> fix: `git submodule update --init --recursive`
+🌽🌽
 
-> ⚠️ macOS will ask for microphone permission on first launch. say yes.
-> this is how audio input works. this is not negotiable.
+macOS will request microphone permission on first launch. this is required for audio input.
 
 ---
 
-## 🎛️ T̷̡͒Ȅ̵͔S̶͓̽T̷̻͋I̸̠͒N̸͚̑G̷̜͝ 🎛️
+## testing
 
-tested against **BlackHole 2ch** — virtual audio driver, free, does exactly what it says.
+install BlackHole virtual audio driver:
 
 ```bash
 brew install blackhole-2ch
 ```
 
-then set BlackHole as your mac system output (System Settings → Sound → Output). the app picks it up from there 🔊
+set BlackHole 2ch as your system output device in System Settings → Sound → Output. the application will route audio from that input to your selected output device.
+
+🪤🦠🪤🦠🪤🦠🪤
 
 ---
 
-## 📐 S̷̰̐T̸̤̿R̸̜͒Ű̸͙C̴̫̀T̴͈̆Ū̸͍R̸͙̈́Ẽ̸̱ 📐
+## structure
 
 ```
 Source/
-├── Main.cpp              ← app entry point, window
-├── MainComponent.h/cpp   ← audio processing + UI layout
-└── LevelMeter.h          ← stereo VU meter, paint(), 30Hz timer
+├── Main.cpp
+├── MainComponent.h
+├── MainComponent.cpp     🧲
+└── LevelMeter.h
 ```
 
-the audio thread is sacred 🕯️ — nothing allocates there, nothing blocks there. `std::atomic<float>` carries data across the boundary. this rule has never been broken and never will be.
+`MainComponent` handles audio processing and UI layout. `LevelMeter` is a custom component running at 30Hz. audio thread state is passed via `std::atomic<float>`. no allocations occur on the audio thread.
 
 ---
 
-## 🎨 D̶̢͒E̷̥͗S̸̠̑I̸̹̓G̷͔͝N̷̢̑ 🎨
-
-dark. glowy. the kind of UI that looks like it's doing something important even when it's just routing your spotify to your headphones.
-
-```
-  0xff0d0d0f   ■  ground (very dark, not quite black)
-  0xff39ff6e   ■  phosphor green (the main glow)
-  0xff00e5ff   ■  data cyan (labels, focused state)
-  0xffff9500   ■  amber (caution)
-  0xffff2d55   ■  red-pink (clip alert)
-```
-
-glow is achieved via layered alpha fills at decreasing radii. it costs almost nothing to render. it looks extremely good. 🌟
+🫀
 
 ---
 
-## 📅 S̷̭͒T̶͖̀A̷̜͝G̸̹͒E̸̞̊S̶̜̕ 📅
+## design
+
+dark theme. VU meter with three zones: safe, caution, clip. settings persist to XML on disk between launches.
 
 ```
-STAGE 1  ✅  bare audio passthrough
-STAGE 2  ✅  volume slider (-60 to 0 dB)
-STAGE 3  ✅  device selector + settings persistence
-STAGE 4  ✅  VU meter + UI polish
-STAGE 5  🔲  ???
+  0xff0d0d0f   ground
+  0xff39ff6e   primary
+  0xff00e5ff   secondary         🪸
+  0xffff9500   warning
+  0xffff2d55   alert
 ```
 
 ---
 
-## 👤 W̶̭̆H̶̝̄Ö̷̖́ 👤
+## notes
 
-**tom** — human. vision. taste. ear.
+🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫
 
-**claude sonnet 4.6** — wrote literally all the code. every line. including this sentence. hi 👋
+this application was written by Claude Sonnet 4.6. every line of code. this line too.
 
----
-
-```
-s̵̨̟̗͔͓͍̳̒̑̈́̊̂̚ẗ̵̢̯͍̫̠̦́͋̑̆̐̕i̵̧̨̲̜͎̓̒̈́̑̃͘l̷̡̗͍͎̤͇̎̃̿͒̐̚l̸̨̖̩͔̬̻̊̿̍̽̄͠ ̸̖͓̩̠̣̎̅͒̽̌͘r̵̘̫͍̫͕̓̌̈͋̀͘ǘ̸̟͍͎̰͓̬̊̌͑̓̕n̸̛̯͎̱͓̝͔̓̑̒̆̕n̸̛̰̜̫̖̟̮̄̓̇̈́͠i̸̧̯͔͖̟͙̍̇̓̋̃͘n̷̛̙̬͔̯̪̟͌͐̉͒̕g̷̨̣̟̹͙͕̊̔̃͑̐̚
-```
+🫧🪣🫧🪣🫧🪣
