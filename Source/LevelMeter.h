@@ -35,7 +35,7 @@ private:
     static constexpr float kDbMin    = -60.0f;
     static constexpr float kDbOrange = -12.0f;
     static constexpr float kDbRed    =  -3.0f;
-    static constexpr float kDbMax    =  12.0f;
+    static constexpr float kDbMax    =  0.0f;
 
     // Fast attack, slow decay
     static constexpr float kAttack = 0.8f;

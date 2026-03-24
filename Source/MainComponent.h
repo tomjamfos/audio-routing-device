@@ -28,12 +28,7 @@ private:
 
     juce::Slider volumeSlider;
 
-    juce::Label    outputLabel      { {}, "Output" };
-    juce::Label    sampleRateLabel  { {}, "Sample Rate" };
-    juce::Label    bufferSizeLabel  { {}, "Buffer Size" };
     juce::ComboBox outputDeviceBox;
-    juce::ComboBox sampleRateBox;
-    juce::ComboBox bufferSizeBox;
 
     LevelMeter levelMeter { peakL, peakR };
 
