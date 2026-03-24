@@ -28,7 +28,7 @@ MainComponent::MainComponent()
     deviceManager.addChangeListener(this);
 
     // Volume slider
-    volumeSlider.setRange(-60.0, 12.0);
+    volumeSlider.setRange(-60.0, 0.0, 0.1);
     volumeSlider.setValue(0.0);
     volumeSlider.setTextValueSuffix(" dB");
     volumeSlider.setSliderStyle(juce::Slider::LinearHorizontal);
@@ -46,21 +46,7 @@ MainComponent::MainComponent()
         deviceManager.setAudioDeviceSetup(setup, true);
     };
 
-    sampleRateBox.onChange = [this] {
-        auto setup = deviceManager.getAudioDeviceSetup();
-        setup.sampleRate = sampleRateBox.getText().getDoubleValue();
-        deviceManager.setAudioDeviceSetup(setup, true);
-    };
-
-    bufferSizeBox.onChange = [this] {
-        auto setup = deviceManager.getAudioDeviceSetup();
-        setup.bufferSize = bufferSizeBox.getText().getIntValue();
-        deviceManager.setAudioDeviceSetup(setup, true);
-    };
-
-    for (auto* label : { &outputLabel, &sampleRateLabel, &bufferSizeLabel })
-        addAndMakeVisible(label);
-    for (auto* box : { &outputDeviceBox, &sampleRateBox, &bufferSizeBox })
+    for (auto* box : { &outputDeviceBox })
         addAndMakeVisible(box);
 
     addAndMakeVisible(volumeSlider);
@@ -81,34 +67,21 @@ void MainComponent::refreshDeviceControls()
 {
     auto* deviceType = deviceManager.getCurrentDeviceTypeObject();
     auto  setup      = deviceManager.getAudioDeviceSetup();
-    auto* device     = deviceManager.getCurrentAudioDevice();
 
     // Output devices
     outputDeviceBox.clear(juce::dontSendNotification);
     if (deviceType != nullptr)
     {
+        auto truncate = [](const juce::String& s) {
+            return s.length() > 14 ? s.substring(0, 12) + "..." : s;
+        };
+
         auto names = deviceType->getDeviceNames(false); // false = outputs
         for (int i = 0; i < names.size(); ++i)
-            outputDeviceBox.addItem(names[i], i + 1);
-        outputDeviceBox.setText(setup.outputDeviceName, juce::dontSendNotification);
+            outputDeviceBox.addItem(truncate(names[i]), i + 1);
+        outputDeviceBox.setText(truncate(setup.outputDeviceName), juce::dontSendNotification);
     }
 
-    // Sample rates
-    sampleRateBox.clear(juce::dontSendNotification);
-    bufferSizeBox.clear(juce::dontSendNotification);
-    if (device != nullptr)
-    {
-        auto rates = device->getAvailableSampleRates();
-        for (int i = 0; i < rates.size(); ++i)
-            sampleRateBox.addItem(juce::String(juce::roundToInt(rates[i])) + " Hz", i + 1);
-        sampleRateBox.setText(juce::String(juce::roundToInt(setup.sampleRate)) + " Hz",
-                              juce::dontSendNotification);
-
-        auto buffers = device->getAvailableBufferSizes();
-        for (int i = 0; i < buffers.size(); ++i)
-            bufferSizeBox.addItem(juce::String(buffers[i]), i + 1);
-        bufferSizeBox.setText(juce::String(setup.bufferSize), juce::dontSendNotification);
-    }
 }
 
 void MainComponent::saveSettings()
@@ -192,23 +165,12 @@ void MainComponent::resized()
     auto meterArea = area.removeFromRight(50);
 
     const int rowH    = 30;
-    const int labelW  = 90;
     const int spacing = 6;
 
     volumeSlider.setBounds(area.removeFromTop(rowH));
     area.removeFromTop(spacing);
 
-    auto layoutRow = [&](juce::Label& label, juce::ComboBox& box)
-    {
-        auto row = area.removeFromTop(rowH);
-        label.setBounds(row.removeFromLeft(labelW));
-        box.setBounds(row);
-        area.removeFromTop(spacing);
-    };
-
-    layoutRow(outputLabel,     outputDeviceBox);
-    layoutRow(sampleRateLabel, sampleRateBox);
-    layoutRow(bufferSizeLabel, bufferSizeBox);
+    outputDeviceBox.setBounds(area.removeFromTop(rowH).withWidth(120));
 
     levelMeter.setBounds(meterArea);
 }
