@@ -7,6 +7,8 @@ add_subdirectory(JUCE)
 
 juce_add_gui_app(AudioRoutingDevice
     PRODUCT_NAME "Audio Routing Device"
+    MICROPHONE_PERMISSION_ENABLED TRUE
+    MICROPHONE_PERMISSION_TEXT "Audio Routing Device needs microphone access to receive audio input."
 )
 
 target_sources(AudioRoutingDevice PRIVATE

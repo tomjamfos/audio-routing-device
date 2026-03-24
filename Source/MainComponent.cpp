@@ -1,9 +1,22 @@
 #include "MainComponent.h"
 
 MainComponent::MainComponent()
+    : deviceSelector(deviceManager, 1, 2, 1, 2, false, false, true, false)
 {
-    setSize(400, 200);
     setAudioChannels(2, 2);
+
+    volumeSlider.setRange(-60.0, 12.0);
+    volumeSlider.setValue(0.0);
+    volumeSlider.setTextValueSuffix(" dB");
+    volumeSlider.setSliderStyle(juce::Slider::LinearHorizontal);
+    volumeSlider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 70, 20);
+    volumeSlider.onValueChange = [this] {
+        gain = juce::Decibels::decibelsToGain((float) volumeSlider.getValue());
+    };
+    addAndMakeVisible(volumeSlider);
+    addAndMakeVisible(deviceSelector);
+
+    setSize(400, 500);
 }
 
 MainComponent::~MainComponent()
@@ -17,32 +30,35 @@ void MainComponent::prepareToPlay(int /*samplesPerBlockExpected*/, double /*samp
 
 void MainComponent::getNextAudioBlock(const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    auto* device = deviceManager.getCurrentAudioDevice();
+    auto* inputDevice  = deviceManager.getCurrentAudioDevice();
 
-    if (device == nullptr)
+    if (inputDevice == nullptr)
     {
         bufferToFill.clearActiveBufferRegion();
         return;
     }
 
-    auto activeInputChannels  = device->getActiveInputChannels();
-    auto activeOutputChannels = device->getActiveOutputChannels();
-    auto maxInputChannels  = activeInputChannels.countNumberOfSetBits();
-    auto maxOutputChannels = activeOutputChannels.countNumberOfSetBits();
+    auto activeInputChannels  = inputDevice->getActiveInputChannels();
+    auto activeOutputChannels = inputDevice->getActiveOutputChannels();
+    int numInputChannels  = activeInputChannels.countNumberOfSetBits();
+    int numOutputChannels = activeOutputChannels.countNumberOfSetBits();
 
-    for (int ch = 0; ch < maxOutputChannels; ++ch)
+    const float g = gain.load();
+
+    for (int ch = 0; ch < numOutputChannels; ++ch)
     {
-        if (!activeOutputChannels[ch] || maxInputChannels == 0)
+        if (numInputChannels == 0)
         {
             bufferToFill.buffer->clear(ch, bufferToFill.startSample, bufferToFill.numSamples);
         }
         else
         {
-            int srcCh = ch % maxInputChannels;
-            bufferToFill.buffer->copyFrom(ch, bufferToFill.startSample,
-                                          *bufferToFill.buffer, srcCh,
-                                          bufferToFill.startSample,
-                                          bufferToFill.numSamples);
+            int srcCh = ch % numInputChannels;
+            auto* inData  = bufferToFill.buffer->getReadPointer(srcCh, bufferToFill.startSample);
+            auto* outData = bufferToFill.buffer->getWritePointer(ch,    bufferToFill.startSample);
+
+            for (int s = 0; s < bufferToFill.numSamples; ++s)
+                outData[s] = inData[s] * g;
         }
     }
 }
@@ -54,11 +70,11 @@ void MainComponent::releaseResources()
 void MainComponent::paint(juce::Graphics& g)
 {
     g.fillAll(getLookAndFeel().findColour(juce::ResizableWindow::backgroundColourId));
-    g.setColour(juce::Colours::white);
-    g.setFont(16.0f);
-    g.drawText("Audio Routing Device", getLocalBounds(), juce::Justification::centred, true);
 }
 
 void MainComponent::resized()
 {
+    auto area = getLocalBounds().reduced(10);
+    volumeSlider.setBounds(area.removeFromTop(40));
+    deviceSelector.setBounds(area);
 }
