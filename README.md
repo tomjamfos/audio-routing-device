@@ -1,47 +1,33 @@
 # audio routing device
 
-macOS application for routing audio. built with JUCE 8 and C++17.
+macOS application for routing audio between virtual and physical devices.
+built with JUCE 8 and C++17. requires Xcode and CMake ≥ 3.22.
 
-🦷
-
----
-
-## requirements
-
-- Xcode
-- CMake ≥ 3.22
-- Git
+̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴̴
 
 ---
 
-## build
+## b͟u͟i͟l͟d͟
 
 ```bash
 git clone --recurse-submodules https://github.com/tomjamfos/audio-routing-device
 cd audio-routing-device
 cmake -B build -DCMAKE_BUILD_TYPE=Debug
 cmake --build build
+open build/AudioRoutingDevice_artefacts/Debug/Audio\ Routing\ Device.app
 ```
 
-if you forgot `--recurse-submodules`:
+i̸f̷ ̸y̷o̸u̷ ̸f̷o̸r̷g̸o̷t̸ ̷-̸-̷r̸e̷c̸u̷r̸s̷e̸-̷s̸u̷b̸m̷o̸d̸u̷l̸e̷s̸:̷
 
 ```bash
 git submodule update --init --recursive
 ```
 
-launch:
-
-```bash
-open build/AudioRoutingDevice_artefacts/Debug/Audio\ Routing\ Device.app
-```
-
-🌽🌽
-
-macOS will request microphone permission on first launch. this is required for audio input.
+m̸̨̛͚a̸̧̛̟c̷̨̛͜O̵͎̎͜S̸̝̑̕ ̷̢͑̕w̶̢͑̀i̵͈͑͘l̵̢̄͘l̷̺̀͘ ̸̱͐̕r̶͓̒̕ȩ̷̒͘q̵̩͝ͅu̸͖͑͘e̷̮̓̕s̸̪̑͘t̷̘͐͘ ̷̠̈͘m̵̲̽͘i̴͙̓͘c̷̲͋͘r̸̝͌͘o̵̱̊͘p̸̘͘͝h̷͙̐͘o̸̢͋͘n̴̨͌͘ȅ̸̢͘ ̷͇̿͘p̵̩̈͘ȅ̷̗͘r̷̹͊͘m̶̥̓͘i̷̘̎͘s̵̲̈́͘ŝ̷̻͘i̸̞͋͘o̵̢̊͘n̶̡̑͘.̸̰͝ ̷̬͊͘g̸͕͒͘r̷̻̃͘a̴̭͘͝n̶̛̗͘t̵̛͔͘ ̷̢͊͘i̷̛̫̕t̵̫̀͘.̸̰̃͘
 
 ---
 
-## testing
+## t̵̡͔̙̬̭̑̒̈̾̑̔e̸͎̟̠͙̐̓̐̏̒͜s̵̡͖̖͊̊̒͝͝ͅt̸͇̱̀̇͊̈́͘i̶̖̮̯̯̊̊͑͝͠n̵̪͔̬͊̐̑͘͝g̶̡̟̤̪͑̐̅̀͝
 
 install BlackHole virtual audio driver:
 
@@ -49,48 +35,46 @@ install BlackHole virtual audio driver:
 brew install blackhole-2ch
 ```
 
-set BlackHole 2ch as your system output device in System Settings → Sound → Output. the application will route audio from that input to your selected output device.
-
-🪤🦠🪤🦠🪤🦠🪤
+s̷͓̲̠̮̩̰̙͈̿͌̓͋̓̈̈͘͢͢ͅȩ̷̗̤͚̩͕̀̍̑̿̅͘͜͢t̷̨͖̯̻̺̭̦͍͔̾̈̂̇̄͘͢͢͝ ̷̡̲̣̙͍̙̝͙̦͋͒̍̌͑̿͜͢͝ͅB̷̢͉͓͍̜̙͎̄̈̓̊̉͊͘͜͢͝ͅl̷̨̡͙̟̬̙͖͎͙̈̓͑̔̾̿͘͢͜ͅa̶̡̡̡̢͓̙̫͍̙͒̓̌̒͆̚͢͢͢͝ͅc̷̢͙͙̙̙͙͙̦̈́̿͗̅̄̀̀͢͢͝ͅk̷̢̢̨̡̙̤̺̦̑̾̽͒͌͋͘͢͝͝H̷̨̧̨̢͙̤̤̟̤̓̅̃̉͘͘͜͢͝ͅo̶̧͍͍͍͙͙̦͎̊̄̎̀̅̿̋͜͢͢l̷̡̢̡̧͙̘̙͍͓͌̊̑̊̇̂͘͢͝e̷̡̡̡͎͍͍̙͓͕̾̉̅̇͆͜͜͢͝ ̶̡̡̛͎̙̤͍̙͔͙͙̙̑̿̾͢͢͢͜͝ͅ2̷̧͓͙̙̝͙͚͓̙͒̍͐̋̄͘͢͢͢͝c̶̨̢̨̧͍͙͙͙̙̑͑̀̋̊͘͜͢͢͝h̷̨̢̧̢̙͍̤͕͙̔͛͌̋̋͜͜͢͢͝ ̷̨̨̧̡͙̙̙͎̙̙̈́͌̒͊͋͘͢͜͜͝ͅa̴̛̟̙͙̙̙̙͙̙̙̍̔̿͋͜͝͝ͅs̷̡̢̧̺͙͙̙̻̙̓͗̈́̑̔͘͢͜͜͝ ̸̢̡̢̢͙̙͙̙̖̙͒̃͊̄͘͘͜͜͝͝ͅs̷̡̡̤̙͙̙̙͙̙̔͋̋̀̏͘͜͢͢͝y̷̢̡̡͕͙̙͙̙̙̓̂̈́̀̋͜͜͢͜͝s̴̡̡̙͙͙̙̙̞̙͒͑̄̒̾͘͜͢͝͝t̵̡͍̙͙͙̙̙̙̩̑̿̈́̈́̚͜͢͢͝e̷̢̡̧̢̙̙͙͙̙̙̓̏̋̉̐͜͢͢͝m̷̡̡̢̝̙̙͙̙͙͒̓̊̓̒͘͜͢͝͝ ̶̢̡̡̡̙̙̙͙̙̙̉̐̈́̉̚͜͢͜͝ȍ̴͍͙͙͙͙̙̙̠̈́̿͑̐͜͢͢͝u̸̡̘̙͙͙͙̙̙͒͗̅̌͘͜͜͢͝t̸̡̡͎͙͙̙̙̙̙͋͋̑̿͜͜͢͝ͅp̷̡̡͎͙̙̙̙̙̙̒̍͑͑͜͢͢͝u̶̧̢̡͚͙̙͙͙̙̓͌͗̿̑͜͢͢͝t̸̨̺̺͙͙͙͙͙͒̒̉̃̃͜͢͢͝
 
 ---
 
-## structure
+## s̵̡̘̺̣͚̦͗̈́̑̎̎̚̚t̴͈̰̼̜̉̎̑͒̐͝r̶̢̨̗͔̙͆̉̈̔̈́̇̉u̸̡̨̼̪̦̠̎̿̊̓͝c̵̙̯̝̜͊̿̂̒̀͘ṯ̵̣̬̗͌͊̈́̅͝ȗ̷̡͓̳̦̝̰̊̋̆̈́r̵̡̖̣̙͚͐̏̊̊̕͝ȩ̶̧̩̩͕̈́̐͒̔̌
 
 ```
 Source/
 ├── Main.cpp
 ├── MainComponent.h
-├── MainComponent.cpp     🧲
+├── MainComponent.cpp
 └── LevelMeter.h
 ```
 
-`MainComponent` handles audio processing and UI layout. `LevelMeter` is a custom component running at 30Hz. audio thread state is passed via `std::atomic<float>`. no allocations occur on the audio thread.
+`MainComponent` handles audio processing and UI layout. the audio thread shares state with the UI via `std::atomic<float>`. no allocations on the audio thread. settings persist to XML between
+
+l̵̢̛͙̥̲͒̈́̑͜ȁ̷̗̳̩̗̱̯͚̼͑̓̃̐̚͝ǘ̷̝̙̗̟͍̊̒͋̑̑͐n̵̡̫̟̖͎͖̖̥͆̈́̒̉̆̎͝c̴̜̲̼̘̭̃̇͑͒̏̑͝ͅȟ̵̡̧̧̪̰͕̫̰͐̑̋̚ȅ̵̖̜͙̘̖͙͝s̵̘̼͙͙͙̙͙̈́̑͛̔͛͘
+
+l̵̢̛͙̥̲͒̈́̑͜ȁ̷̗̳̩̗̱̯͚̼͑̓̃̐̚͝ǘ̷̝̙̗̟͍̊̒͋̑̑͐n̵̡̫̟̖͎͖̖̥͆̈́̒̉̆̎͝c̴̜̲̼̘̭̃̇͑͒̏̑͝ͅȟ̵̡̧̧̪̰͕̫̰͐̑̋̚ȅ̵̖̜͙̘̖͙͝s̵̘̼͙͙͙̙͙̈́̑͛̔͛͘
+
+l̵̢̛͙̥̲͒̈́̑͜ȁ̷̗̳̩̗̱̯͚̼͑̓̃̐̚͝ǘ̷̝̙̗̟͍̊̒͋̑̑͐n̵̡̫̟̖͎͖̖̥͆̈́̒̉̆̎͝c̴̜̲̼̘̭̃̇͑͒̏̑͝ͅȟ̵̡̧̧̪̰͕̫̰͐̑̋̚ȅ̵̖̜͙̘̖͙͝s̵̘̼͙͙͙̙͙̈́̑͛̔͛͘
 
 ---
 
-🫀
-
----
-
-## design
-
-dark theme. VU meter with three zones: safe, caution, clip. settings persist to XML on disk between launches.
+## d̵̡̲͉̫͔̯̈́̊̒͋̈̑͜e̵̗̪͓̻̙͑͌͑͌̾͘s̸̢̘͎̙͚͓͊̑̋̿̉͝i̷̢̱̫̲̩̙͌̈́̊̉̍̕g̸̯̘͔͎͔͗͑̒̌̇͘n̷̪͎̘͉̩̉̏̀͑̾͝
 
 ```
   0xff0d0d0f   ground
   0xff39ff6e   primary
-  0xff00e5ff   secondary         🪸
+  0xff00e5ff   secondary
   0xffff9500   warning
   0xffff2d55   alert
 ```
 
----
+̴̢̡̨͚̱̩̙͍̥̱͍̘̙̙͕̹̳̙̙̙̙̮͖̙̱̝͐̿̈́̌͘͘͘͘͝ͅͅ
 
-## notes
+̵̧̨̩͙̙͕͍̙͚͙̙̙̙̙͍͎͕͚͚͙͍̙̙̙͙̙͙͍̘̙̙̙̑͋̂̎͘͘͘͘͝ͅͅͅ
 
-🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫🧫
+̸̡̢̡̤͉͙̩̙̙͙̙̙̙̙͙̙̙͙͙̙̙̙̙͙̙̙̙͙̙̙͙̀̔̐̑͘͘͘͘͝ͅͅͅ
 
-this application was written by Claude Sonnet 4.6. every line of code. this line too.
+t̴̨̤͔̗͕̫̖̙̙̙̙͎̝͍͍̙̙̙̙̤̙͉͓̑̑̈̊͘͘͘͘͝ͅh̸̡̟̱̙̱̙͙̙̙͙̙̙͙̙̙͙̙̙̙͙̙̙̙̙̙̙̙̅̓̿͘͘͘͘͝ͅi̵͔̩̯͓͔͙̙̙̙̙̙͙̙̙̙̙̙̙̙̙̙̙͙̙̙̙̙̓̌̓͘͘͘͘͝ͅs̵̡͍̙̳͖͇̙̙̙͙̙̙̙̙̙̙̙̙̙̙͙̙̙̙̙̙̙̿̔̾͘͘͘͘͝ͅͅ ̸̢̛͓͖͚͎͙͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͙̙̙͙̈́̑͘͘͘͘͝ͅͅd̵͉̩͓̺̩̙͙̙̙͙̙̙͙̙̙̙̙̙̙̙̙̙͙̙̙̙̙̿̈́̐͘͘͘͘͝ͅo̷̡̡̙̱̫̯̙͙̙̙̙͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͙͙̓̀̉͘͘͘͘͝ͅc̵͚͕̳̗̪̙̙̙̙͙͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̈́̿̀͘͘͘͘͝ͅu̵̧̺̩̪̤̙̙̙͙̙̙͙̙̙̙̙̙̙̙̙̙̙̙̙͙̙̙̙͒̓̈͘͘͘͘͝ͅm̸̡͉͎̫͚̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͑̔̂͘͘͘͘͝ͅe̴̢͙̺̪̱̙̙̙̙̙̙͙̙̙̙̙̙͙̙̙̙̙̙̙̙̙̙̿̌̑͘͘͘͘͝ͅn̸̡̢̛͎̖̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̄͌͘͘͘͘͝ͅt̸̡͕̘͓̤̙̙̙̙̙̙͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̿̋̓͘͘͘͘͝ͅ ̸̢̡̹͕̳̙͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͙̙̙̈́̔̊͘͘͘͘͝ͅw̸̡̧̻̖̱̙̙̙̙͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̓̌͘͘͘͘͝ͅa̵̢̧̤͔̙̙̙̙͙̙̙̙̙̙͙̙̙̙̙̙̙̙̙̙̙̙̙͌̿̚͘͘͘͘͝ͅs̴̡̨͙̼͓͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͙̙̓̈́̑͘͘͘͘͝ͅ ̴̨̨̛̗͉̙̙̙̙͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͒̎͘͘͘͘͝ͅw̷̨̨͉͎̙̙̙̙̙͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̿̎̓͘͘͘͘͝ͅr̴̡̡̘̮͕̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̈́̊̑͘͘͘͘͝ͅi̵̡̧͔͕̣̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͑̐̈͘͘͘͘͝ͅṯ̸̡͎̤͉̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̓̿͗͘͘͘͘͝ͅͅt̴̢̡̛̘̳͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͒̏͘͘͘͘͝ͅe̷̡̡̟͙̻̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̒̓̔͘͘͘͘͝ͅñ̷̛̝̙͔̤͙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̌̑͘͘͘͘͝ͅ ̸̡̧͓̲͖̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙͑̊̄͘͘͘͘͝ͅb̷̛̙͖̲̮̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̙̈́̋͘͘͘͘͝ͅy̷̡̢͙̹̙̙̙̙̙̙̙̙̙̙̙̙̙̙͙̙̙̙̙̙̙̙̙̓̔̊͘͘͘͘͝ͅ
 
-🫧🪣🫧🪣🫧🪣
+ Claude Sonnet 4.6
