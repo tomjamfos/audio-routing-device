@@ -59,6 +59,7 @@ These apply to all code, always. Never violate them:
 - **Just implement** — no need to explain the approach before writing code unless something is genuinely ambiguous
 - **Ask before:** adding new files, adding dependencies, changing the CMake setup, anything irreversible
 - **Commit style:** short declarative subject line, freeform body if context is needed. No conventional commits prefix required.
+- **Commit autonomously** — commit whenever a logical unit of work is complete (feature added, bug fixed, meaningful refactor done). No need to ask.
 
 ---
 
