@@ -73,6 +73,18 @@ Motifs that feel right: crosshair brackets `⌜ ⌟`, segment dividers, alphanum
 
 ---
 
+## Build and launch
+
+After implementing visual changes, always build and relaunch the app so the result is visible:
+
+```bash
+cmake --build build && open "build/AudioRoutingDevice_artefacts/Debug/Audio Routing Device.app"
+```
+
+Do this automatically on completion — no need to ask.
+
+---
+
 ## Output format
 
 - Code in C++ (JUCE includes assumed)
